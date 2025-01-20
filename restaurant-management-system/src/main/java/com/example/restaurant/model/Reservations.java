@@ -1,18 +1,31 @@
 package com.example.restaurant.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 import java.sql.Time;
 
 @Entity
-public class Reservations {
+public class Reservations implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reservation_id;
+
+    @JsonProperty("restaurantId")
     private int restaurant_id;
+
+    @JsonProperty("customerId")
     private int customer_id;
+
+    @JsonProperty("tableId")
     private int table_id;
+
+    @JsonProperty("reservationDate")
     private Date reservation_date;
+
+    @JsonProperty("reservationTime")
     private Time reservation_time;
 
     // Getters and Setters
@@ -62,5 +75,17 @@ public class Reservations {
 
     public void setReservationTime(Time reservation_time) {
         this.reservation_time = reservation_time;
+    }
+
+    @Override
+    public String toString() {
+        return "Reservations{" +
+                "reservation_id=" + reservation_id +
+                ", restaurant_id=" + restaurant_id +
+                ", customer_id=" + customer_id +
+                ", table_id=" + table_id +
+                ", reservation_date=" + reservation_date +
+                ", reservation_time=" + reservation_time +
+                '}';
     }
 }

@@ -3,9 +3,11 @@ package com.example.restaurant.controller;
 import com.example.restaurant.model.Reservations;
 import com.example.restaurant.service.ReservationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.web.bind.annotation.*;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/reservations")
@@ -13,6 +15,11 @@ public class ReservationController {
 
     @Autowired
     private ReservationService reservationService;
+
+    @Autowired
+    private KafkaTemplate<String, Reservations> kafkaTemplate;
+
+    private static final String TOPIC = "reservation_topic";
 
     @GetMapping
     public Page<Reservations> getAllReservations(Pageable pageable) {
@@ -25,8 +32,10 @@ public class ReservationController {
     }
 
     @PostMapping
-    public Reservations createReservation(@RequestBody Reservations reservation) {
-        return reservationService.saveReservation(reservation);
+    public String createReservation(@RequestBody Reservations reservation) {
+        System.out.println("Reservation sent:"+reservation);
+        kafkaTemplate.send(TOPIC, reservation);
+        return "Reservation published to Kafka topic";
     }
 
     @PutMapping("/{id}")
