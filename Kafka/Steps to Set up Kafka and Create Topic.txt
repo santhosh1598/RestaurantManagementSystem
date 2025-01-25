@@ -1,0 +1,16 @@
+Keep this docker-compose.yaml file in one folder and open cmd.exe in that folder and run this command(Please note you should have docker-desktop or docker running on your system):
+docker-compose up -d
+
+Now run the following command:
+docker compose ps
+
+Now find the container Id of Kafka container and run the following command
+docker exec -it <kafka_container_name> /bin/bash
+Suppose container id is kafka-kafka-1 the run this command
+docker exec -it kafka-kafka-1 /bin/bash
+
+Now Run this command to create kafka topic:
+kafka-topics.sh --create --topic reservation_topic --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1
+
+Now Run this command to verify the topic creation:
+kafka-topics.sh --list --bootstrap-server localhost:9092
